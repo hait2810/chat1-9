@@ -1,8 +1,8 @@
 
 const sendRequest = (req, res, next) => {
-  const { msg } = req.body;
-  _io.emit("haine", msg);
-
+  
+  _io.username = req.body.msg
+  _io.emit("haine", req.body);
   res.json({ code: 200 });
 };
 

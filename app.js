@@ -10,6 +10,7 @@ const PORT = process.env.PORT || 80;
 http.listen(PORT, () => {
     console.log("Nodejs is running", PORT);
 })
+
 app.use(express.json())
 
 app.use(router)
@@ -20,6 +21,8 @@ app.get((req,res,next) => {
         res.io = io
         next();
 })
-
+_io.on("connection", (socket) => {
+    
+})
 
 

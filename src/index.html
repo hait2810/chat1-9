@@ -10,33 +10,63 @@
     <title>Index</title>
 </head>
 <body>
-    <h1>HảiB</h1>
+    <h1>HảiB</h1> <button type="button" id="logout" class="btn btn-danger">Đăng xuất</button>
       <form>
-        <div class="mb-3">
-          <label for="exampleFormControlTextarea1" class="form-label">Nhập nội dung:</label>
-          <textarea class="form-control" id="content" rows="3"></textarea>
+        <div id="box-signup">
+          <div class="mb-3">
+            <label for="exampleFormControlInput1" class="form-label">Mời bạn nhập tên: </label>
+            <input type="email" class="form-control" id="name" placeholder="Hải">
+          </div>
+          <div class="mb-3">
+            <button type="button" class="btn btn-info" id="btn-signup">Xác nhận</button>
+          </div>
         </div>
-        <div class="mb-3">
-          <button id="btnt" class="btn btn-success" type="button">Gửi đi?</button>
+        <div id="box-content">
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Nhập nội dung:</label>
+            
+            <textarea class="form-control" id="content" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <button id="btnt" class="btn btn-success" type="button">Gửi đi?</button>
+          </div>
         </div>
 
       </form>
-     <ol></ol>
+     <div id="message"></div>
       <script src="/socket.io/socket.io.js"></script>  
       <script>
         
-        
-         
-   
+        function checklogin () {
+          const local = JSON.parse(localStorage.getItem("user"))
+        if(!local) {
+          $("#box-signup").show(2000)
+          $("#box-content").hide()  
+          $("#logout").hide()  
+        }else {
+          $("#box-content").show(2000)  
+          $("#logout").show(1000)  
+          $("#box-signup").hide(0)
+        }
+        }
+        checklogin()
         const socket = io()
         socket.on('connect', () => {
         
         })
-
+        $("#logout").click(() => {
+            localStorage.removeItem("user")
+            checklogin()
+        })
+        $("#btn-signup").click(async () => {
+             await localStorage.setItem("user", JSON.stringify($("#name").val()))
+             await checklogin()
+        })
         
         $("#btnt").click(function() {
-         
+          const local = JSON.parse(localStorage.getItem("user"))
           const data = {
+          name: local,
           msg: $("#content").val()
          }
         const url = "/send"
@@ -53,13 +83,16 @@
     referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     body: JSON.stringify(data) // body data type must match "Content-Type" header
   });
+  $("#content").val('')
 });
+
+
+
         socket.on('haine', (msg) => {
         
           $(document).ready(function() {
-         
            
-            $("ol").append("<li>"+msg+"</li>"); ;
+            $("#message").append("<h1 style='font-size: 14px'>"+msg.name+" - "+msg.msg+"</h1>"); ;
             
           })
         })

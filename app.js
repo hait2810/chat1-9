@@ -22,7 +22,10 @@ app.get((req,res,next) => {
         next();
 })
 _io.on("connection", (socket) => {
-    
+    console.log(socket.id, socket.username);
+    socket.on("disconnect", () => {
+        console.log(socket.id, socket.username);    
+    })
 })
 
 

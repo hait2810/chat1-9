@@ -1,0 +1,10 @@
+body::-webkit-scrollbar{
+    width: 10px !important;
+ }
+ body::-webkit-scrollbar-track{
+   background-color: #fafafa !important;
+ }
+ body::-webkit-scrollbar-thumb{
+   background-image: linear-gradient(-45deg, #6a5af9, #d66efd) !important;
+   border-radius: 50px !important;
+ }

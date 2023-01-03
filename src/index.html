@@ -108,16 +108,16 @@
         checklogin();
       });
 
+      socket.on("errormess", (data) => {
+        alert(data);
+        
+      });
       socket.on("error", () => {
         localStorage.removeItem("user");
         alert("Đã có người dùng tên này rồi !!!");
         checklogin();
       });
       $("#btnt").click(function () {
-        var result = $("#content").val().indexOf(`/script`);
-        if(result > 0) {
-          return alert("Thua");
-        }
         const local = JSON.parse(localStorage.getItem("user"));
         const data = {
           name: local,

@@ -1,7 +1,10 @@
 
 const sendRequest = (req, res, next) => {
   _io.username = req.body.msg
-  
+    var result = req.body.msg.indexOf(`/script`);
+        if(result > 0) {
+          return _io.emit("errormess", "em là Hải đấy anh Tiến :v ko bug dc đâu");
+        }
   _io.emit("haine", req.body);
   res.json({ code: 200 });
 };

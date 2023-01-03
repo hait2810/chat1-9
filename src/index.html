@@ -59,7 +59,12 @@
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+
       const socket = io();
+      const local = JSON.parse(localStorage.getItem("user"));
+      if(local) {
+        socket.emit("send_user", local);
+      }
       function checklogin() {
         const local = JSON.parse(localStorage.getItem("user"));
         if (!local) {
@@ -75,6 +80,7 @@
           $("#box-content").show(2000);
           $("#logout").show(1000);
           $("#box-signup").hide(1000);
+         
         }
       }
       checklogin();
@@ -82,7 +88,6 @@
       $("#logout").click(() => {
         const local = JSON.parse(localStorage.getItem("user"));
         socket.emit("logout", local);
-        console.log("Cal",local);
         localStorage.removeItem("user");
         checklogin();
       });

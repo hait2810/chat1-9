@@ -39,6 +39,7 @@ _io.on("connection", (socket) => {
   })
   _io.sockets.emit("success", users);
   socket.on("disconnect", () => {
-    console.log(socket.id, socket.username);
+    users = users.filter((item) => item !== socket.username)
+    _io.sockets.emit("success", users);
   });
 });

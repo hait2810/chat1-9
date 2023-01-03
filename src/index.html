@@ -54,15 +54,20 @@
       </div>
     </form>
     <div class="bg-light d-flex align-items-center justify-content-between">
-      <div id="message" class="d-flex flex-column w-75"></div>
+      <div id="message" class="d-flex flex-column w-75">
+        <ul
+          id="list-message"
+          class="align-items-center"
+          style="font-size: 14px; overflow-wrap: break-word"
+        ></ul>
+      </div>
       <div id="online"></div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
-
       const socket = io();
       const local = JSON.parse(localStorage.getItem("user"));
-      if(local) {
+      if (local) {
         socket.emit("send_user", local);
       }
       function checklogin() {
@@ -80,7 +85,6 @@
           $("#box-content").show(2000);
           $("#logout").show(1000);
           $("#box-signup").hide(1000);
-         
         }
       }
       checklogin();
@@ -110,7 +114,6 @@
 
       socket.on("errormess", (data) => {
         alert(data);
-        
       });
       socket.on("error", () => {
         localStorage.removeItem("user");
@@ -141,7 +144,6 @@
       });
 
       socket.on("success", async (data) => {
-        console.log("DAta",data);
         $(document).ready(function () {
           listuser = "";
           data.forEach((element) => {
@@ -156,15 +158,21 @@
       });
 
       socket.on("haine", (msg) => {
-        $(document).ready(function () {
-          $("#message").append(
-            "<h1 id='list-message' class='align-items-center' style='font-size: 14px;  overflow-wrap: break-word;'>" +
-              msg.name +
-              ": " +
-              msg.msg +
-              "</h1>"
-          );
+        let message = "";
+        const parent = document.querySelector("#list-message");
+        parent.innerHTML = "";
+
+        msg.forEach((element) => {
+          const li = document.createElement("li");
+          li.setAttribute("class","align-items-center");
+          li.setAttribute("style", 'font-size: 14px;  overflow-wrap: break-word; font-weight:bold;')
+          li.innerText = element.name + ":" + element.msg;
+          parent.appendChild(li);
+          // $("#list-message").append(li);
+          //  message += element.name + "-" + element.msg;
         });
+
+        // $("#list-message").text(message);
       });
     </script>
   </body>

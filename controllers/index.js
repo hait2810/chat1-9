@@ -5,8 +5,13 @@ const sendRequest = (req, res, next) => {
         if(result > 0) {
           return _io.emit("errormess", "em là Hải đấy anh Tiến :v ko bug dc đâu");
         }
-  _io.emit("haine", req.body);
+        if(req.body.msg == "/clear") {
+          _message = []
+        }
+        _message.push(req.body)
+  _io.emit("haine", _message);
   res.json({ code: 200 });
+
 };
 
 

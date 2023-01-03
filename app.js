@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 80;
 http.listen(PORT, () => {
   console.log("Nodejs is running", PORT);
 });
-
+var message = []
+global._message = message
 app.use(express.json());
 
 app.use(router);
@@ -23,6 +24,7 @@ app.get((req, res, next) => {
 });
 var users = [];
 _io.on("connection", (socket) => {
+  
   socket.on("send_user", (data) => {
     const exitsUser = users.find((item) => item == data);
     if (exitsUser) {
@@ -38,6 +40,7 @@ _io.on("connection", (socket) => {
     _io.sockets.emit("success", users);
   })
   _io.sockets.emit("success", users);
+  socket.emit("haine", message);
   socket.on("disconnect", () => {
     users = users.filter((item) => item !== socket.username)
     _io.sockets.emit("success", users);

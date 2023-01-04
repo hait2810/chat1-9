@@ -138,20 +138,21 @@
           name: local,
           msg: $("#content").val(),
         };
-        const url = "/send";
-        const response = fetch(url, {
-          method: "POST", // *GET, POST, PUT, DELETE, etc.
-          mode: "cors", // no-cors, *cors, same-origin
-          cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-          credentials: "same-origin", // include, *same-origin, omit
-          headers: {
-            "Content-Type": "application/json",
-            // 'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          redirect: "follow", // manual, *follow, error
-          referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-          body: JSON.stringify(data), // body data type must match "Content-Type" header
-        });
+        socket.emit("sendmessage", data)
+        // const url = "/send";
+        // const response = fetch(url, {
+        //   method: "POST", // *GET, POST, PUT, DELETE, etc.
+        //   mode: "cors", // no-cors, *cors, same-origin
+        //   cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+        //   credentials: "same-origin", // include, *same-origin, omit
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //     // 'Content-Type': 'application/x-www-form-urlencoded',
+        //   },
+        //   redirect: "follow", // manual, *follow, error
+        //   referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+        //   body: JSON.stringify(data), // body data type must match "Content-Type" header
+        // });
         $("#content").val("");
       });
 
@@ -170,11 +171,12 @@
       });
 
       socket.on("haine", (msg) => {
+        console.log(msg);
         let message = "";
         const parent = document.querySelector("#list-message");
         parent.innerHTML = "";
-
         msg.forEach((element) => {
+          console.log(element);
           const li = document.createElement("li");
           li.setAttribute("class","align-items-center");
           li.setAttribute("style", 'font-size: 14px;  overflow-wrap: break-word; font-weight:bold;')

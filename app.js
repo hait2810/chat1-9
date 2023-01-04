@@ -10,8 +10,7 @@ const PORT = process.env.PORT || 80;
 http.listen(PORT, () => {
   console.log("Nodejs is running", PORT);
 });
-var message = []
-global._message = message
+
 app.use(express.json());
 
 app.use(router);
@@ -22,9 +21,10 @@ app.get((req, res, next) => {
   res.io = io;
   next();
 });
+
 var users = [];
+var message = [];
 _io.on("connection", (socket) => {
-  
   socket.on("send_user", (data) => {
     const exitsUser = users.find((item) => item == data);
     if (exitsUser) {
@@ -36,13 +36,24 @@ _io.on("connection", (socket) => {
     }
   });
   socket.on("logout", (data) => {
-    users = users.filter((item) => item !== data)
+    users = users.filter((item) => item !== data);
     _io.sockets.emit("success", users);
-  })
+  });
+
+  socket.on("sendmessage", async (data) => {
+    if (data.msg == "/clear") {
+      message = [];
+      socket.emit("haine", message);
+    } else {
+      message.push(data);
+      socket.emit("haine", message);
+    }
+  });
+
   _io.sockets.emit("success", users);
   socket.emit("haine", message);
   socket.on("disconnect", () => {
-    users = users.filter((item) => item !== socket.username)
+    users = users.filter((item) => item !== socket.username);
     _io.sockets.emit("success", users);
   });
 });

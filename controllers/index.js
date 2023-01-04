@@ -6,7 +6,8 @@ const sendRequest = (req, res, next) => {
           return _io.emit("errormess", "em là Hải đấy anh Tiến :v ko bug dc đâu");
         }
         if(req.body.msg == "/clear") {
-         return _message = []
+          _message = []
+         return _io.emit("haine", _message);
         }
         _message.push(req.body)
   _io.emit("haine", _message);

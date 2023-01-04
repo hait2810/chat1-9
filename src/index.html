@@ -17,23 +17,41 @@
       crossorigin="anonymous"
     ></script>
     <style>
-      #list-message::-webkit-scrollbar{
-    width: 10px !important;
- }
- #list-message::-webkit-scrollbar-track{
-   background-color: #fafafa !important;
- }
- #list-message::-webkit-scrollbar-thumb{
-   background-image: linear-gradient(-45deg, #6a5af9, #d66efd) !important;
-   border-radius: 50px !important;
- }
+      #list-message::-webkit-scrollbar {
+        width: 10px !important;
+      }
+      #list-message::-webkit-scrollbar-track {
+        background-color: #fafafa !important;
+      }
+      #list-message::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(-45deg, #6a5af9, #d66efd) !important;
+        border-radius: 50px !important;
+      }
     </style>
     <title>Hải Brave</title>
   </head>
   <body>
-    <h1>HảiB</h1>
-    <button type="button" id="logout" class="btn btn-danger">Đăng xuất</button>
-
+    <div class="d-flex gap-5 mb-2">
+      <h1>Chào, <span id="showname"></span></h1>
+      <button type="button" id="logout" class="btn btn-danger">
+        Đăng xuất
+      </button>
+    </div>
+    <div class="bg-light d-flex align-items-center justify-content-between">
+      <div id="message" class="d-flex flex-column w-75">
+        <ul
+          id="list-message"
+          class="align-items-center"
+          style="
+            font-size: 14px;
+            overflow-wrap: break-word;
+            max-height: 300px;
+            overflow: scroll;
+          "
+        ></ul>
+      </div>
+      <div id="online"></div>
+    </div>
     <form>
       <div id="box-content">
         <div class="mb-3 my-1">
@@ -60,21 +78,12 @@
         </div>
         <div class="mb-3">
           <button type="button" class="btn btn-info" id="btn-signup">
-            Xác nhận
+            Đăng nhập
           </button>
         </div>
       </div>
     </form>
-    <div class="bg-light d-flex align-items-center justify-content-between">
-      <div id="message" class="d-flex flex-column w-75">
-        <ul
-          id="list-message"
-          class="align-items-center"
-          style="font-size: 14px; overflow-wrap: break-word; max-height: 300px; overflow: scroll;"
-        ></ul>
-      </div>
-      <div id="online"></div>
-    </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script>
       const socket = io();
@@ -85,6 +94,7 @@
       function checklogin() {
         const local = JSON.parse(localStorage.getItem("user"));
         if (!local) {
+          $("#showname").text("");
           $("#box-signup").show();
           $("#box-content").hide();
           $("#message").hide();
@@ -96,10 +106,16 @@
           $("#online").show();
           $("#box-content").show();
           $("#logout").show();
+          $("#showname").text(local);
           $("#box-signup").hide();
         }
       }
       checklogin();
+
+      function scrollauto() {
+        //$("#list-message").scrollTop(9999999999999999999);
+        $("#list-message").animate({ scrollTop: 9999999999 }, 100);
+      }
 
       $("#logout").click(() => {
         const local = JSON.parse(localStorage.getItem("user"));
@@ -138,7 +154,7 @@
           name: local,
           msg: $("#content").val(),
         };
-        socket.emit("sendmessage", data)
+        socket.emit("sendmessage", data);
         // const url = "/send";
         // const response = fetch(url, {
         //   method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -171,15 +187,16 @@
       });
 
       socket.on("haine", (msg) => {
-        console.log(msg);
         let message = "";
         const parent = document.querySelector("#list-message");
         parent.innerHTML = "";
         msg.forEach((element) => {
-          console.log(element);
           const li = document.createElement("li");
-          li.setAttribute("class","align-items-center");
-          li.setAttribute("style", 'font-size: 14px;  overflow-wrap: break-word; font-weight:bold;')
+          li.setAttribute("class", "align-items-center");
+          li.setAttribute(
+            "style",
+            "font-size: 14px;  overflow-wrap: break-word; font-weight:bold;"
+          );
           li.innerText = element.name + ":" + element.msg;
           parent.appendChild(li);
           // $("#list-message").append(li);
@@ -187,6 +204,7 @@
         });
 
         // $("#list-message").text(message);
+        scrollauto();
       });
     </script>
   </body>

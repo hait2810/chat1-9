@@ -46,10 +46,11 @@ _io.on("connection", (socket) => {
       socket.emit("haine", message);
     } else {
       message.push(data);
+      message.reverse()
       socket.emit("haine", message);
     }
   });
-
+  message.reverse()
   _io.sockets.emit("success", users);
   socket.emit("haine", message);
   socket.on("disconnect", () => {

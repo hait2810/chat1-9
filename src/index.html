@@ -28,7 +28,7 @@
    border-radius: 50px !important;
  }
     </style>
-    <title>Hải 201</title>
+    <title>Hải Brave</title>
   </head>
   <body>
     <h1>HảiB</h1>
@@ -85,18 +85,18 @@
       function checklogin() {
         const local = JSON.parse(localStorage.getItem("user"));
         if (!local) {
-          $("#box-signup").show(2000);
-          $("#box-content").hide(1000);
-          $("#message").hide(2000);
+          $("#box-signup").show();
+          $("#box-content").hide();
+          $("#message").hide();
           $("#message").removeClass("d-flex flex-column");
-          $("#logout").hide(2000);
-          $("#online").hide(2000);
+          $("#logout").hide();
+          $("#online").hide();
         } else {
-          $("#message").show(1000);
-          $("#online").show(1000);
-          $("#box-content").show(2000);
-          $("#logout").show(1000);
-          $("#box-signup").hide(1000);
+          $("#message").show();
+          $("#online").show();
+          $("#box-content").show();
+          $("#logout").show();
+          $("#box-signup").hide();
         }
       }
       checklogin();

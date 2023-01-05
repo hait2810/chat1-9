@@ -41,7 +41,7 @@ _io.on("connection", (socket) => {
   });
 
   socket.on("sendmessage", async (data) => {
-    if (data.msg == "/clear") {
+    if (data.msg == "/cls") {
       message = [];
       socket.emit("haine", message);
     } else {

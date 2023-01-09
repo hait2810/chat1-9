@@ -5,208 +5,273 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <link href="./src/assets/css/chat.css" rel="stylesheet" />
     <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
       rel="stylesheet"
-      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-      crossorigin="anonymous"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-      crossorigin="anonymous"
-    ></script>
-    <style>
-      #list-message::-webkit-scrollbar {
-        width: 10px !important;
-      }
-      #list-message::-webkit-scrollbar-track {
-        background-color: #fafafa !important;
-      }
-      #list-message::-webkit-scrollbar-thumb {
-        background-image: linear-gradient(-45deg, #6a5af9, #d66efd) !important;
-        border-radius: 50px !important;
-      }
-    </style>
-    <title>Hải Brave</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="./src/assets/css/customcss.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <link
+      rel="shortcut icon"
+      href="https://cdn-icons-png.flaticon.com/512/1653/1653630.png"
+      type="image/x-icon"
+    />
+    <title>Chat</title>
   </head>
   <body>
-    <div class="d-flex gap-5 mb-4">
-      <h1>Chào, <span id="showname"></span></h1>
-      <button type="button" id="logout" class="btn btn-danger">
-        Đăng xuất
-      </button>
+    <div class="container">
+      <div class="flex">
+        <!-- list  -->
+        <div
+          id="left"
+          class="bg-[#f8f9fa] border-r border-gray-300 border-solid hidden md:block md:max-w-[360px] w-full"
+        >
+          <div
+            class="height-header ml-2 flex border-b border-gray-300 items-center border-solid"
+          >
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/2480/2480525.png"
+              id="btn-back"
+              class="md:hidden cursor-pointer w-[30px] h-[30px]"
+              alt=""
+            />
+            <h2 class="title font-bold text-[18px] text-[#6c757d] py-4">
+              Trực tuyến
+            </h2>
+          </div>
+          <div
+            id="list-message"
+            class="list-message messages ml-[10px] max-h-[500px] overflow-scroll"
+          >
+          </div>
+        </div>
+        <div id="right" style="width: 100%;" class="md:block block bg-[#fff]">
+          <div class="flex items-center gap-2 ml-2 title height-header py-4">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/8727/8727934.png"
+              id="btn_toggle"
+              class="md:hidden cursor-pointer w-[30px] mr-[20px]"
+              alt=""
+            />
+            <img
+              class="md:block hidden w-6"
+              src="https://cdn-icons-png.flaticon.com/512/9200/9200734.png"
+              alt=""
+            />
+            <h3 class="font-bold text-[18px] text-[#6c757d]">Chat</h3>
+            <marquee class="text-gray-500 opacity-60">
+              <div class="flex items-center">
+                <img
+                  class="w-[30px] h-[20px] mr-2"
+                  src="https://cdn-icons-png.flaticon.com/512/1141/1141117.png"
+                  alt=""
+                />
+                <span id="current-online"></span>
+              </div>
+            </marquee>
+          </div>
+          <div
+          style="width: 100%;"
+            id="list-messages"
+            class="list-message bg-[#f8f9fa] border-t border-gray-300 py-2 max-h-[600px] overflow-scroll"
+          >
+           
+          </div>
+          <div class="form">
+            <form action="" class="flex gap-2">
+              <textarea
+                class="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded-md transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="content"
+                rows="1"
+                placeholder="Your message"
+              ></textarea>
+              <button
+                type="button"
+                id="btn_sendmessage"
+                class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-3 border w-[50px] h-[50px] border-blue-500 hover:border-transparent rounded-[50%]"
+              >
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3682/3682321.png"
+                  class="w-[30px]"
+                  alt=""
+                />
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="bg-light d-flex align-items-center justify-content-between">
-      <div id="message" class="d-flex flex-column w-75">
-        <ul
-          id="list-message"
-          class="align-items-center"
-          style="
-            font-size: 14px;
-            overflow-wrap: break-word;
-            height: 300px;
-            max-height: 300px;
-            overflow: scroll;
-          "
-        ></ul>
-      </div>
-      <div id="online"></div>
-    </div>
-    <form>
-      <div id="box-content">
-        <div class="mb-3 my-1">
-          <textarea class="form-control" id="content" rows="3"></textarea>
-        </div>
-        <div class="mb-3">
-          <button id="btnt" class="btn btn-success" type="button">
-            Gửi đi?
-          </button>
-        </div>
-      </div>
-      <div id="box-signup">
-        <div class="mb-3">
-          <label for="exampleFormControlInput1" class="form-label"
-            >Mời bạn nhập tên:
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="name"
-            placeholder="Hải"
-            required
-          />
-        </div>
-        <div class="mb-3">
-          <button type="button" class="btn btn-info" id="btn-signup">
-            Đăng nhập
-          </button>
-        </div>
-      </div>
-    </form>
-
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io();
-      const local = JSON.parse(localStorage.getItem("user"));
-      if (local) {
-        socket.emit("send_user", local);
-      }
-      function checklogin() {
-        const local = JSON.parse(localStorage.getItem("user"));
-        if (!local) {
-          $("#showname").text("");
-          $("#box-signup").show();
-          $("#box-content").hide();
-          $("#message").hide();
-          $("#message").removeClass("d-flex flex-column");
-          $("#logout").hide();
-          $("#online").hide();
-        } else {
-          $("#message").show();
-          $("#online").show();
-          $("#box-content").show();
-          $("#logout").show();
-          $("#showname").text(local);
-          $("#box-signup").hide();
+          const socket = io();
+          const user = JSON.parse(localStorage.getItem("user"))
+         
+         function checkLogin () { 
+            if(!user) {
+               window.location="/signin"
+            }else {
+              const datauser = {
+                _id: user._id,
+                username: user.username,
+                fullname: user.fullname,
+                avatar: user.avatar,
+                facebook: user.facebook
+            }
+              socket.emit('useronline',  datauser)
+            }
         }
-      }
-      checklogin();
-
+        checkLogin()
+        $('#btn_sendmessage').click(function()  {
+              const time = moment().format("HH:MM L");
+              const message = $("#content").val();
+              if(!user) {
+                return window.location="/signin"
+              }
+              if(!user.avatar) {
+                user.avatar = './src/imgs/resource.jpg'
+              }
+              const data = {
+                _id: user._id,
+                fullname: user.fullname,
+                message,
+                time,
+                avatar: user.avatar
+                
+              }
+              socket.emit('sendmessage',data)
+              
+        })
+        socket.on('sendmessserver', (data) => {
+              let message = ''
+              let html = ''
+              data.forEach(element => {
+                if(user._id == element._id) {
+                      html = `  <div id="div1" class="px-5 flex gap-2 mt-[30px] flex-row-reverse">
+              <img
+                class="w-[50px] h-[50px] border rounded-lg"
+                src=`+element.avatar+`
+                alt=""
+              />
+              <div id="div2" class="gap-y-2 flex flex-col items-end">
+                <div id="div3"
+                  class="chat-box bg-[#388cc0] py-2 rounded-lg max-w-[800px]"
+                >
+                  <p id="div4" class="px-5 text-white">
+                    `+element.message+`
+                  </p>
+                  <p class="px-5" style="color: #ffebcd">
+                    <small>From: `+element.fullname+`</small>
+                  </p>
+                </div>
+                <div id="div5" class="time opacity-60 mr-2 flex items-center gap-2">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/735/735824.png"
+                    class="w-[15px] h-[15px]"
+                    alt=""
+                  />
+                  <small>`+element.time+`</small>
+                </div>
+              </div>
+            </div>`
+                }else {
+                  html = ` <div id="div1" class="px-5 flex gap-2 mt-[30px]">
+              <img
+                class="w-[50px] h-[50px] border rounded-lg"
+                src="https://graph.facebook.com/5/picture?access_token=6628568379|c1e620fa708a1d5696fb991c1bde5662&amp;width=500&amp;height=500"
+                alt=""
+              />
+              <div id="div2"  class="gap-y-2 flex flex-col">
+                <div id="div3"
+                  class="chat-box bg-[#e0f3ff] py-2 rounded-lg max-w-[800px]"
+                >
+                  <p id="div4" class="px-5">
+                    `+element.message+`
+                  </p>
+                  <p class="px-5" style="color: #715e43">
+                    <small
+                      >From: `+element.fullname+`</small
+                    >
+                  </p>
+                </div>
+                <div id="div5" class="time opacity-60 ml-2 flex items-center gap-2">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/735/735824.png"
+                    class="w-[15px] h-[15px]"
+                    alt=""
+                  />
+                  <small>`+element.time+`</small>
+                </div>
+              </div>
+            </div>`
+                }
+                message += html;
+                
+              });
+              $("#list-messages").html(message)
+              scrollauto();
+        })
+        socket.on('senduseronline', (data) => {
+          $('#current-online').text('Hiện tại có '+data.length+' người đang online')
+          $(document).ready(function () {
+            useronline = ""
+            data.forEach(element => {
+              
+            if(!element.facebook) {
+                element.facebook = 'Chưa cập nhật'
+            }
+              useronline += `<div class="message items-center flex gap-2 my-[10px]">
+              <div class="avatar-icon">
+                <img
+                  class="min-w-[30px] w-[30px]"
+                  src='https://cdn-icons-png.flaticon.com/512/1582/1582439.png'
+                  alt=""
+                />
+              </div>
+              <div class="title bg- p-2 mr-2 rounded-md">
+                <a href="#" class="btn_read"
+                  ><h3 class="title font-bold text-[#212529] text-[16px]">
+                    `+element.fullname+`
+                  </h3></a
+                >
+                <a href=`+element.facebook+` target="_blank"
+                  ><p
+                    class="text-[#212529d7] truncate md:max-w-[250px] max-w-[300px]"
+                  >
+                  `+element.facebook+`
+                  </p></a
+                >
+              </div>
+            </div>`
+            });
+            $("#list-message").html(useronline)
+          })
+        })
+      
       function scrollauto() {
-        //$("#list-message").scrollTop(9999999999999999999);
-        $("#list-message").animate({ scrollTop: 9999999999 }, 100);
+        $("#list-messages").animate({ scrollTop: 1000 }, 0);
       }
-
-      $("#logout").click(() => {
-        const local = JSON.parse(localStorage.getItem("user"));
-        socket.emit("logout", local);
-        localStorage.removeItem("user");
-        checklogin();
+      scrollauto();
+      var w = window.innerWidth;
+      $(".btn_read").click(() => {
+        if (w < 767) {
+          $("#left").hide(0);
+          $("#right").show(0);
+        }
       });
-      $("#btn-signup").click(async () => {
-        socket.emit("send_user", $("#name").val());
-        socket.on("success", async (data) => {
-          listuser = "";
-          data.forEach((element) => {
-            listuser +=
-              `<h1 class='text-black-50' style='font-size:14px;'><span>` +
-              element +
-              `</span> đang online</h1>`;
-          });
-
-          $("#online").html(listuser);
-        });
-        localStorage.setItem("user", JSON.stringify($("#name").val()));
-        checklogin();
+      $("#btn_toggle").click(() => {
+        $("#left").show(0);
+        $("#right").hide(0);
       });
-
-      socket.on("errormess", (data) => {
-        alert(data);
-      });
-      socket.on("error", () => {
-        localStorage.removeItem("user");
-        alert("Đã có người dùng tên này rồi !!!");
-        checklogin();
-      });
-      $("#btnt").click(function () {
-        const local = JSON.parse(localStorage.getItem("user"));
-        const data = {
-          name: local,
-          msg: $("#content").val(),
-        };
-        socket.emit("sendmessage", data);
-        // const url = "/send";
-        // const response = fetch(url, {
-        //   method: "POST", // *GET, POST, PUT, DELETE, etc.
-        //   mode: "cors", // no-cors, *cors, same-origin
-        //   cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-        //   credentials: "same-origin", // include, *same-origin, omit
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //     // 'Content-Type': 'application/x-www-form-urlencoded',
-        //   },
-        //   redirect: "follow", // manual, *follow, error
-        //   referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        //   body: JSON.stringify(data), // body data type must match "Content-Type" header
-        // });
-        $("#content").val("");
-      });
-
-      socket.on("success", async (data) => {
-        $(document).ready(function () {
-          listuser = "";
-          data.forEach((element) => {
-            listuser +=
-              `<h1 class='text-black-50' style='font-size:14px;'><span>` +
-              element +
-              `</span> đang online</h1>`;
-          });
-
-          $("#online").html(listuser);
-        });
-      });
-
-      socket.on("haine", (msg) => {
-        let message = "";
-        const parent = document.querySelector("#list-message");
-        parent.innerHTML = "";
-        msg.forEach((element) => {
-          const li = document.createElement("li");
-          li.setAttribute("class", "align-items-center");
-          li.setAttribute(
-            "style",
-            "font-size: 14px;  overflow-wrap: break-word; font-weight:bold;"
-          );
-          li.innerText = element.name + ":" + element.msg;
-          parent.appendChild(li);
-          // $("#list-message").append(li);
-          //  message += element.name + "-" + element.msg;
-        });
-
-        // $("#list-message").text(message);
+      $("#btn-back").click(() => {
         scrollauto();
+        $("#left").hide(0);
+        $("#right").show(0);
       });
+      
+
     </script>
   </body>
 </html>

@@ -1,0 +1,99 @@
+body {
+   background-color: mediumturquoise;
+}
+ /* Helper */
+    .dp-flex{
+        display: flex;
+    }
+
+ /* Helper */
+#login-form {
+    background-color: #f9fafe;
+    width: 300px;
+    height: 400px;
+    border-radius: 20px;
+    margin: 200px auto;
+    text-align: center;
+    opacity: 0.95;
+
+}
+#login-form h1 {
+    color: rgb(27, 190, 201);
+    font-weight: bold;
+    font-size: 30px;
+}
+h1 {
+    padding: 50px 0 0 0 ;
+}
+
+#login-form input {
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+    width: 250px;
+    color: violet;
+    padding: 8px 20px;
+    margin: 20px 0 0 0;
+    box-shadow: rgba(153, 153, 251, 0.25) 0px 30px 60px -12px, rgba(86, 51, 193, 0.3) 0px 18px 36px -18px;
+}
+#login-form input:focus {
+    outline: 2px solid rgba(88, 88, 255, 0.306);
+    transition: 50ms all ease;
+}
+@media screen and (min-width: 1100px) {
+    body {
+        background-image: url("https://wallpaperaccess.com/full/2825710.gif");
+        background-size: cover; 
+    }
+}
+#btn-signup {
+    background: rgb(27, 190, 201);
+    color: white;
+    padding: 8px 25px;
+    margin-top: 20px;
+    border-radius: 5px;
+    outline: none;
+    border:none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3 ease;
+}
+#btn-signup::before, #btn-signup::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background-color: rgba(33, 172, 203, 0.614);
+    transition: 0.4s ease all;
+}
+#btn-signup:hover {
+    background-color: transparent;
+    color: violet;
+  }
+#btn-signup::after {
+    right: inherit;
+    top: inherit;
+    bottom: 0;
+    left: 0;
+}
+#btn-signup:hover::before, #btn-signup:hover::after {
+    width: 100%;
+    transition: all 0.3 ease;
+    /* border: 1px solid rgb(142, 147, 189); */
+}
+
+.heading {
+    font-size: 13px;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+
+}
+.heading a { 
+    padding-left: 5px;
+    font-weight: bold;
+    color: rgb(27, 190, 201);
+    font-size: 16px;
+}

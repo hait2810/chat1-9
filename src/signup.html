@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="./src/assets/css/chat.css" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="./src/assets/css/customcss.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./src/assets/css/customlogin.css" />
+    <link
+      rel="shortcut icon"
+      href="https://cdn-icons-png.flaticon.com/512/1653/1653630.png"
+      type="image/x-icon"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+    />
+    <title>Sign Up</title>
+  </head>
+  <body>
+    <div id="login-form">
+      <h1>Sign Up</h1>
+      <form action="">
+        <input type="text" name="" placeholder="Full name" id="fullname" />
+        <input type="text" name="" placeholder="User name" id="username" />
+        <input type="password" name="" placeholder="Password" id="password" />
+        <button id="btn-signup" type="button">Submit</button>
+      </form>
+      <div class="heading dp-flex">
+        <p>Do you already have an account?</p>
+        <a href="./signin"> Sign In</a>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
+    <script>
+      function showNoti(status, message, title) {
+        Command: toastr[status](message, title);
+        toastr.options = {
+          closeButton: true,
+          debug: true,
+          newestOnTop: true,
+          progressBar: true,
+          positionClass: "toast-top-right",
+          preventDuplicates: true,
+          showDuration: "200",
+          hideDuration: "1000",
+          timeOut: "1000",
+          extendedTimeOut: "1000",
+          showEasing: "swing",
+          hideEasing: "linear",
+          showMethod: "fadeIn",
+          hideMethod: "fadeOut",
+        };
+      }
+      $("#btn-signup").click(function () {
+        var fullname = $("#fullname").val();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if (fullname.length < 1 || username.length < 1 || password.length < 1) {
+          return showNoti("error", "Please do not leave it blank!", "Faild!");
+        } else if (username.length < 6) {
+          return showNoti(
+            "error",
+            "Account name must be more than 6 characters",
+            "Fail!"
+          );
+        }
+        const data = {
+            fullname,
+            username,
+            password
+        }
+        const signup = async () => {
+            const res = await axios.post("/signup", data)
+            console.log("res",res);
+            if(res.data.code == 400) {
+                showNoti("error",res.data.message,"Faild!")
+            }else {
+                showNoti('success', "Sign Up Success", "Success!")
+                setTimeout(() => {
+                    window.location='/signin'
+                }, 1500);
+            }
+        }
+        signup()
+        
+      });
+    </script>
+  </body>
+</html>

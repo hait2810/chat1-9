@@ -3,6 +3,7 @@ var routerUser = require('./routes/user')
 const mongoose = require('mongoose')
 var app = express();
 var path = require("path");
+const routerChat = require("./routes/chat");
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
 global.__basedir = __dirname;
@@ -31,6 +32,7 @@ app.use(routerUser);
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/index.html"));
 });
+app.use(routerChat)
 app.get("/signup", (req,res) => {
   res.sendFile(path.join(__dirname, "src/signup.html"))
 })
@@ -57,14 +59,19 @@ _io.on("connection", (socket) => {
       socket.on('sendmessage', (data) => {
            if(data.message == '/cls') {
                 message = []
-                socket.emit("sendmessserver", message);
+                _io.sockets.emit("sendmessserver", message);
            }
            else {
             message.push(data);
-            socket.emit("sendmessserver", message);
+            _io.sockets.emit("sendmessserver", message);
           }
       })
-      socket.emit("sendmessserver", message);
+      _io.sockets.emit("sendmessserver", message);
+      socket.on("senduserlogout", (data) => {
+        const userout = users.filter((item) => item._id != data._id)
+        users = userout
+        _io.sockets.emit('senduseronline', users)
+      })
   socket.on("disconnect", () => {
         const userout = users.filter((item) => item._id != socket._iduser)
         users = userout

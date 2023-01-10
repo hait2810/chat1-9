@@ -45,10 +45,12 @@
           <div
             id="list-message"
             class="list-message messages ml-[10px] max-h-[500px] overflow-scroll"
-          >
+          ></div>
+          <div class="logout">
+            <button type="button" id="btn-logout" class="btn">Đăng xuất</button>
           </div>
         </div>
-        <div id="right" style="width: 100%;" class="md:block block bg-[#fff]">
+        <div id="right" style="width: 100%" class="md:block block bg-[#fff]">
           <div class="flex items-center gap-2 ml-2 title height-header py-4">
             <img
               src="https://cdn-icons-png.flaticon.com/512/8727/8727934.png"
@@ -74,12 +76,10 @@
             </marquee>
           </div>
           <div
-          style="width: 100%;"
+            style="width: 100%; min-height: 500px"
             id="list-messages"
             class="list-message bg-[#f8f9fa] border-t border-gray-300 py-2 max-h-[600px] overflow-scroll"
-          >
-           
-          </div>
+          ></div>
           <div class="form">
             <form action="" class="flex gap-2">
               <textarea
@@ -105,54 +105,68 @@
       </div>
     </div>
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
     <script>
-          const socket = io();
-          const user = JSON.parse(localStorage.getItem("user"))
-         
-         function checkLogin () { 
-            if(!user) {
-               window.location="/signin"
-            }else {
-              const datauser = {
-                _id: user._id,
-                username: user.username,
-                fullname: user.fullname,
-                avatar: user.avatar,
-                facebook: user.facebook
-            }
-              socket.emit('useronline',  datauser)
-            }
+      const socket = io();
+      const user = JSON.parse(localStorage.getItem("user"));
+
+      function checkLogin() {
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user) {
+          window.location = "/signin";
+        } else {
+          const datauser = {
+            _id: user._id,
+            username: user.username,
+            fullname: user.fullname,
+            avatar: user.avatar,
+            role: user.role,
+            facebook: user.facebook,
+          };
+          socket.emit("useronline", datauser);
         }
-        checkLogin()
-        $('#btn_sendmessage').click(function()  {
-              const time = moment().format("HH:MM L");
-              const message = $("#content").val();
-              if(!user) {
-                return window.location="/signin"
-              }
-              if(!user.avatar) {
-                user.avatar = './src/imgs/resource.jpg'
-              }
-              const data = {
-                _id: user._id,
-                fullname: user.fullname,
-                message,
-                time,
-                avatar: user.avatar
-                
-              }
-              socket.emit('sendmessage',data)
-              
-        })
-        socket.on('sendmessserver', (data) => {
-              let message = ''
-              let html = ''
-              data.forEach(element => {
-                if(user._id == element._id) {
-                      html = `  <div id="div1" class="px-5 flex gap-2 mt-[30px] flex-row-reverse">
+      }
+      checkLogin();
+      $("#btn_sendmessage").click(async function () {
+        const time = moment().format("HH:mm L");
+        const message = $("#content").val();
+        if (!user) {
+          return (window.location = "/signin");
+        }
+        if (!user.avatar) {
+          user.avatar = "./src/imgs/resource.jpg";
+        }
+        const data = {
+          _id: user._id,
+          fullname: user.fullname,
+          message,
+          time,
+          avatar: user.avatar,
+        };
+        const res = await axios.post("/sendchat", data);
+        console.log("res", res);
+        if (res.data.code == 200) {
+          socket.emit("sendmessage", data);
+          $("#content").val("");
+        }
+      });
+      $("#btn-logout").click(function () {
+        socket.emit("senduserlogout", user);
+        localStorage.removeItem("user");
+        checkLogin();
+      });
+      socket.on("sendmessserver", (data) => {
+        let message = "";
+        let html = "";
+        data.forEach((element) => {
+          if (user._id == element._id) {
+            html =
+              `  <div id="div1" class="px-5 flex gap-2 mt-[30px] flex-row-reverse">
               <img
                 class="w-[50px] h-[50px] border rounded-lg"
-                src=`+element.avatar+`
+                src=` +
+              element.avatar +
+              `
                 alt=""
               />
               <div id="div2" class="gap-y-2 flex flex-col items-end">
@@ -160,10 +174,14 @@
                   class="chat-box bg-[#388cc0] py-2 rounded-lg max-w-[800px]"
                 >
                   <p id="div4" class="px-5 text-white">
-                    `+element.message+`
+                    ` +
+              element.message +
+              `
                   </p>
                   <p class="px-5" style="color: #ffebcd">
-                    <small>From: `+element.fullname+`</small>
+                    <small>From: ` +
+              element.fullname +
+              `</small>
                   </p>
                 </div>
                 <div id="div5" class="time opacity-60 mr-2 flex items-center gap-2">
@@ -172,15 +190,20 @@
                     class="w-[15px] h-[15px]"
                     alt=""
                   />
-                  <small>`+element.time+`</small>
+                  <small>` +
+              element.time +
+              `</small>
                 </div>
               </div>
-            </div>`
-                }else {
-                  html = ` <div id="div1" class="px-5 flex gap-2 mt-[30px]">
+            </div>`;
+          } else {
+            html =
+              ` <div id="div1" class="px-5 flex gap-2 mt-[30px]">
               <img
                 class="w-[50px] h-[50px] border rounded-lg"
-                src="https://graph.facebook.com/5/picture?access_token=6628568379|c1e620fa708a1d5696fb991c1bde5662&amp;width=500&amp;height=500"
+                src=` +
+              element.avatar +
+              `
                 alt=""
               />
               <div id="div2"  class="gap-y-2 flex flex-col">
@@ -188,11 +211,15 @@
                   class="chat-box bg-[#e0f3ff] py-2 rounded-lg max-w-[800px]"
                 >
                   <p id="div4" class="px-5">
-                    `+element.message+`
+                    ` +
+              element.message +
+              `
                   </p>
                   <p class="px-5" style="color: #715e43">
                     <small
-                      >From: `+element.fullname+`</small
+                      >From: ` +
+              element.fullname +
+              `</small
                     >
                   </p>
                 </div>
@@ -202,27 +229,37 @@
                     class="w-[15px] h-[15px]"
                     alt=""
                   />
-                  <small>`+element.time+`</small>
+                  <small>` +
+              element.time +
+              `</small>
                 </div>
               </div>
-            </div>`
-                }
-                message += html;
-                
-              });
-              $("#list-messages").html(message)
-              scrollauto();
-        })
-        socket.on('senduseronline', (data) => {
-          $('#current-online').text('Hiện tại có '+data.length+' người đang online')
-          $(document).ready(function () {
-            useronline = ""
-            data.forEach(element => {
-              
-            if(!element.facebook) {
-                element.facebook = 'Chưa cập nhật'
+            </div>`;
+          }
+          message += html;
+        });
+        $("#list-messages").html(message);
+        scrollauto();
+      });
+
+      socket.on("senduseronline", (data) => {
+        $("#current-online").text(
+          "Hiện tại có " + data.length + " người đang online"
+        );
+        $(document).ready(function () {
+          useronline = "";
+          data.forEach((element) => {
+            console.log(element);
+            let role =
+              '<img src="https://cdn-icons-png.flaticon.com/512/2460/2460529.png" class="role w-[15px] h-[15px]" alt="" />';
+            if (element.role != 1) {
+              role = "";
             }
-              useronline += `<div class="message items-center flex gap-2 my-[10px]">
+            if (!element.facebook) {
+              element.facebook = "Chưa cập nhật";
+            }
+            useronline +=
+              `<div class="message items-center flex gap-2 my-[10px]">
               <div class="avatar-icon">
                 <img
                   class="min-w-[30px] w-[30px]"
@@ -232,24 +269,32 @@
               </div>
               <div class="title bg- p-2 mr-2 rounded-md">
                 <a href="#" class="btn_read"
-                  ><h3 class="title font-bold text-[#212529] text-[16px]">
-                    `+element.fullname+`
+                  ><h3 class="flex items-center gap-2 title font-bold text-[#212529] text-[16px]">
+                    ` +
+              element.fullname +
+              `  ` +
+              role +
+              `
                   </h3></a
                 >
-                <a href=`+element.facebook+` target="_blank"
+                <a href=` +
+              element.facebook +
+              ` target="_blank"
                   ><p
                     class="text-[#212529d7] truncate md:max-w-[250px] max-w-[300px]"
                   >
-                  `+element.facebook+`
+                  ` +
+              element.facebook +
+              `
                   </p></a
                 >
               </div>
-            </div>`
-            });
-            $("#list-message").html(useronline)
-          })
-        })
-      
+            </div>`;
+          });
+          $("#list-message").html(useronline);
+        });
+      });
+
       function scrollauto() {
         $("#list-messages").animate({ scrollTop: 1000 }, 0);
       }
@@ -270,8 +315,6 @@
         $("#left").hide(0);
         $("#right").show(0);
       });
-      
-
     </script>
   </body>
 </html>

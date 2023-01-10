@@ -72,6 +72,10 @@ _io.on("connection", (socket) => {
         users = userout
         _io.sockets.emit('senduseronline', users)
       })
+      socket.on('noti', (data) => {
+        _io.sockets.emit('senduseronline', users)
+        _io.sockets.emit("sendmessserver", message);
+      })
   socket.on("disconnect", () => {
         const userout = users.filter((item) => item._id != socket._iduser)
         users = userout

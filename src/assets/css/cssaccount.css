@@ -132,5 +132,6 @@ form {
     }
     .form-input input {
         width: 180px;
+        font-size: 12px;
     }
 }

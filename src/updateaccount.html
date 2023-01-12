@@ -86,6 +86,8 @@
       const password = $("#password");
       const avatar = $("#avatar");
       const avatarcurrent = $("#avatarcurrent");
+  
+     
       async function getInfoAccount(id) {
         const res = await axios.get("/user/" + id);
         if (res.data.code == 200) {
@@ -113,6 +115,7 @@
         }
       });
       $("#btn-edit").click(async function () {
+        
         let linkavatar = avatarcurrent.val()
         if (fileimg) {
           const apiUrl = "https://api.cloudinary.com/v1_1/hait-10/image/upload";
@@ -128,16 +131,27 @@
             linkavatar = data.url;
           } 
         }
-        const raw = {
+        let raw = {}
+        if(password.val().length < 1) {
+             raw = {
           facebook: facebook.val(),
           fullname: fullname.val(),
           sdt: sdt.val(),
           avatar: linkavatar,
-          password: password.val(),
         };
+        }else {
+             raw = {
+          facebook: facebook.val(),
+          fullname: fullname.val(),
+          sdt: sdt.val(),
+          avatar: linkavatar,
+          facebook: password.val()
+        };
+        }
         const res = await axios.put("/user/" + id[4], raw);
         if (res.data.code == 200) {
             localStorage.removeItem("user")
+            alert("Success, Please log in again")
             location.reload();
         }else {
             alert("Faild, reload the page and try again")

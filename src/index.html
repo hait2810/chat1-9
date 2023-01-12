@@ -119,7 +119,9 @@
      
       const socket = io();
       const user = JSON.parse(localStorage.getItem("user"));
-      $("#btn_edit").html('<a href="/update/'+user._id+'" id="btn_edit" class="btn">Sửa thông tin</a>')
+      if(user) {
+        $("#btn_edit").html('<a href="/update/'+user._id+'" id="btn_edit" class="btn">Sửa thông tin</a>')
+      }
       $(window).focus(function () {
         socket.emit("noti", "focus");
       });

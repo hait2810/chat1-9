@@ -56,7 +56,7 @@
                 type="password"
                 name=""
                 id="password"
-                placeholder="Password"
+                placeholder="Không đổi pass thì không điền"
               />
             </div>
           </div>
@@ -114,8 +114,9 @@
           $("#preview").attr("src", URL.createObjectURL(event.target.files[0]));
         }
       });
+      
       $("#btn-edit").click(async function () {
-        
+        $("#btn-edit").prop('disabled', true);
         let linkavatar = avatarcurrent.val()
         if (fileimg) {
           const apiUrl = "https://api.cloudinary.com/v1_1/hait-10/image/upload";
@@ -155,6 +156,7 @@
             location.reload();
         }else {
             alert("Faild, reload the page and try again")
+            $("#btn-edit").prop('disabled', false);
         }
       });
     </script>

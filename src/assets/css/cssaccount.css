@@ -122,3 +122,15 @@ form {
     transition: all 0.3 ease;
     /* border: 1px solid rgb(142, 147, 189); */
   }
+@media screen and (max-width: 500px) {
+    .view-profiles {
+        width: 400px;
+        gap: 10px;
+    }
+    .linkaddress {
+        overflow-wrap: anywhere;
+    }
+    .form-input input {
+        width: 180px;
+    }
+}

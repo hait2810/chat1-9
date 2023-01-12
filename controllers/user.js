@@ -48,4 +48,36 @@ const signin = async (req,res) => {
         res.status(400).json({message: "Login failed!"});
     }
 }
-module.exports = {signup,signin}
+const update = async (req,res) => {
+        try {
+            const user = await Users.findByIdAndUpdate({_id: req.params.id}, req.body, {returnDocument: 'after'}).exec()
+            res.json({code:200, user: {
+                _id: user._id,
+                username: user.username,
+                fullname: user.fullname,
+                facebook: user.facebook,
+                avatar: user.avatar,
+                sdt: user.sdt
+    
+            }})
+        } catch (error) {
+            res.status(400).json(error)
+        }
+}
+const readUser = async (req,res) => {
+    try {
+        const user = await Users.findById({_id: req.params.id}).exec() 
+        res.json({code: 200,user: {
+            _id: user._id,
+            username: user.username,
+            fullname: user.fullname,
+            facebook: user.facebook,
+            avatar: user.avatar,
+            sdt: user.sdt
+
+        }})
+    } catch (error) {
+        res.status(400).json(error)
+    }
+}
+module.exports = {signup,signin,update, readUser}

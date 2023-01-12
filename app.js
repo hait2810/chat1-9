@@ -32,6 +32,9 @@ app.use(routerUser);
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "src/index.html"));
 });
+app.get("/update/:id", (req, res) => {
+  res.sendFile(path.join(__dirname, "src/updateaccount.html"));
+});
 app.use(routerChat)
 app.get("/signup", (req,res) => {
   res.sendFile(path.join(__dirname, "src/signup.html"))

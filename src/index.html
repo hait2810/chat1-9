@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="./src/assets/css/customcss.css" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-    <link
-      rel="shortcut icon"
-      href="https://cdn-icons-png.flaticon.com/512/1653/1653630.png"
-      type="image/x-icon"
-    />
+      <link
+        rel="shortcut icon"
+        href="https://cdn-icons-png.flaticon.com/512/1653/1653630.png"
+        type="image/x-icon"
+      />
     <title>Chat</title>
   </head>
   <body>
@@ -46,8 +46,11 @@
             id="list-message"
             class="list-message messages ml-[10px] max-h-[500px] overflow-scroll"
           ></div>
-          <div class="logout">
+          <div class="logout flex items-center gap-2">
             <button type="button" id="btn-logout" class="btn">Đăng xuất</button>
+            <div id="btn_edit" style="margin-top:20px;">
+
+            </div>
           </div>
         </div>
         <div id="right" style="width: 100%" class="md:block block bg-[#fff]">
@@ -113,15 +116,17 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
     <script>
+     
       const socket = io();
       const user = JSON.parse(localStorage.getItem("user"));
+      $("#btn_edit").html('<a href="/update/'+user._id+'" id="btn_edit" class="btn">Sửa thông tin</a>')
       $(window).focus(function () {
         socket.emit("noti", "focus");
       });
       $(window).blur(function () {
         socket.emit("noti", "blur");
       });
-
+     
       function checkLogin() {
         const user = JSON.parse(localStorage.getItem("user"));
         if (!user) {

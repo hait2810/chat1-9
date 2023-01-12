@@ -1,0 +1,124 @@
+* {
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Helper */
+.text-center {
+    text-align: center;
+}
+.dp-flex {
+    display: flex;
+}
+.items-center {
+    align-items: center;
+}
+.flex-col {
+    flex-direction: column;
+}
+.block {
+    display: block;
+}
+
+/* End helper */
+
+.view-profiles {
+    width: 500px;
+}
+.title { 
+    color: rgba(128, 128, 128, 0.852)
+}
+.container {
+    margin: 20px 0;
+}
+
+.avatar {
+    padding: 1px;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 2px solid violet;
+    object-fit: cover;
+}
+.name {
+    font-weight: 600;
+    color: rgba(128, 128, 128, 0.877);
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+.linkaddress {
+    text-decoration: none;
+    font-size: 14px;
+    color: rgba(128, 128, 128, 0.63);
+}
+.form {
+    max-width: 600px;
+}
+.titleform {
+    font-weight: 600;
+    font-size: 18px;
+    color:rgba(128, 128, 128, 0.63) ;
+}
+form {
+    margin:  0 auto;
+
+}
+.form-input {
+    margin: 0;
+}
+.form-input input {
+    padding: 8px;
+    border: 1px solid rgb(248, 199, 199);
+    border-radius: 3px;
+    width: 250px;
+}
+.form-input input:focus {
+    outline: 1px solid rgba(90, 184, 247, 0.879);
+}
+.wrapper-input {
+    margin: 15px 0;
+    gap: 20px;
+}
+.btn {
+    background: rgb(27, 190, 201);
+    color: white;
+    padding: 8px 25px;
+    margin-top: 20px;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3 ease;
+  }
+  .btn::before,
+  .btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    background-color: rgba(33, 172, 203, 0.614);
+    transition: 0.4s ease all;
+  }
+  .btn:hover {
+    background-color: transparent;
+    color: violet;
+  }
+  .btn::after {
+    right: inherit;
+    top: inherit;
+    bottom: 0;
+    left: 0;
+  }
+  .btn:hover::before,
+  .btn:hover::after {
+    width: 100%;
+    transition: all 0.3 ease;
+    /* border: 1px solid rgb(142, 147, 189); */
+  }

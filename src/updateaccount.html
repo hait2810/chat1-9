@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../src/assets/css/cssaccount.css" />
+    <link
+      rel="shortcut icon"
+      href="https://cdn-icons-png.flaticon.com/512/1653/1653630.png"
+      type="image/x-icon"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <title>Update Account</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="title text-center">User Profile</h1>
+      <div class="view-profiles dp-flex items-center">
+        <img
+          id="preview"
+          class="avatar"
+          src="https://graph.facebook.com/4/picture?access_token=6628568379|c1e620fa708a1d5696fb991c1bde5662&width=500&height=500"
+          alt=""
+        />
+        <div class="info block">
+          <h3 class="name" id="name"></h3>
+          <a id="linkaddress" class="linkaddress" target="_blank" href=""></a>
+        </div>
+      </div>
+      <div class="form">
+        <form>
+          <div class="wrapper-input dp-flex">
+            <div class="form-input">
+              <label class="block titleform">Full name: </label>
+              <input
+                type="text"
+                name=""
+                id="fullname"
+                placeholder="Full name"
+              />
+            </div>
+            <div class="form-input">
+              <label class="block titleform">Facebook: </label>
+              <input type="text" name="" id="facebook" placeholder="Facebook" />
+            </div>
+          </div>
+          <div class="wrapper-input dp-flex">
+            <div class="form-input">
+              <label class="block titleform">Phone Number: </label>
+              <input type="number" name="" id="sdt" placeholder="Phone" />
+            </div>
+            <div class="form-input">
+              <label class="block titleform">Password: </label>
+              <input
+                type="password"
+                name=""
+                id="password"
+                placeholder="Password"
+              />
+            </div>
+          </div>
+          <div class="wrapper-input dp-flex items-center">
+            <div class="form-input">
+              <label class="block titleform">Avatar: </label>
+              <input type="file" name="" id="avatar" />
+              <input type="hidden" name="" id="avatarcurrent" />
+            </div>
+            <div class="form-input">
+              <button class="btn" id="btn-edit" type="button">Submit</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem("user"));
+        if(!user) {
+            window.location = '/signin'
+        }
+      const id = window.location.href.split("/");
+      const facebook = $("#facebook");
+      const fullname = $("#fullname");
+      const sdt = $("#sdt");
+      const password = $("#password");
+      const avatar = $("#avatar");
+      const avatarcurrent = $("#avatarcurrent");
+      async function getInfoAccount(id) {
+        const res = await axios.get("/user/" + id);
+        if (res.data.code == 200) {
+          if (res.data.user.avatar) {
+            $("#preview").attr("src", res.data.user.avatar);
+          }
+          facebook.val(res.data.user.facebook);
+          fullname.val(res.data.user.fullname);
+          sdt.val(res.data.user.sdt);
+
+          $("#name").text(res.data.user.fullname);
+          $("#linkaddress").text(res.data.user.facebook);
+          avatarcurrent.val(res.data.user.avatar);
+        } else {
+          alert("User không tồn tại");
+          window.location = "/";
+        }
+      }
+      getInfoAccount(id[4]);
+      let fileimg;
+      $("#avatar").change(function (event) {
+        fileimg = event.target.files[0];
+        if (URL.createObjectURL(event.target.files[0])) {
+          $("#preview").attr("src", URL.createObjectURL(event.target.files[0]));
+        }
+      });
+      $("#btn-edit").click(async function () {
+        let linkavatar = avatarcurrent.val()
+        if (fileimg) {
+          const apiUrl = "https://api.cloudinary.com/v1_1/hait-10/image/upload";
+          const formdata = new FormData();
+          formdata.append("file", fileimg);
+          formdata.append("upload_preset", "gsixsix");
+          const { data } = await axios.post(apiUrl, formdata, {
+            headers: {
+              "Content-type": "application/form-data",
+            },
+          });
+          if (data.url) {
+            linkavatar = data.url;
+          } 
+        }
+        const raw = {
+          facebook: facebook.val(),
+          fullname: fullname.val(),
+          sdt: sdt.val(),
+          avatar: linkavatar,
+          password: password.val(),
+        };
+        const res = await axios.put("/user/" + id[4], raw);
+        if (res.data.code == 200) {
+            localStorage.removeItem("user")
+            location.reload();
+        }else {
+            alert("Faild, reload the page and try again")
+        }
+      });
+    </script>
+  </body>
+</html>

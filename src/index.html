@@ -215,6 +215,46 @@
               </div>
             </div>`;
           } else {
+            if(element.id == "63bf8e705f4e6b61f38ddfbf") {
+              html =
+              ` <div id="div1" class="px-5 flex gap-2 mt-[30px]">
+              <img style="object-fit: cover;"
+                class="w-[50px] h-[50px] border rounded-lg"
+                src=` +
+              element.avatar +
+              `
+                alt=""
+              />
+              <div id="div2"  class="gap-y-2 flex flex-col">
+                <div id="div3"
+                  class="chat-box bg-[#e0f3ff] py-2 rounded-lg max-w-[800px]"
+                >
+                  <p id="div4" style="overflow-wrap: break-word;" class="px-5 addcolor">
+                    ` +
+              element.message +
+              `
+                  </p>
+                  <p class="px-5" style="color: #715e43">
+                    <small
+                      >From: ` +
+              element.fullname +
+              `</small
+                    >
+                  </p>
+                </div>
+                <div id="div5" class="time opacity-60 ml-2 flex items-center gap-2">
+                  <img
+                    src="https://cdn-icons-png.flaticon.com/512/735/735824.png"
+                    class="w-[15px] h-[15px]"
+                    alt=""
+                  />
+                  <small>` +
+              element.time +
+              `</small>
+                </div>
+              </div>
+            </div>`;
+          }else {
             html =
               ` <div id="div1" class="px-5 flex gap-2 mt-[30px]">
               <img style="object-fit: cover;"
@@ -254,7 +294,11 @@
               </div>
             </div>`;
           }
+            
+          }
+          
           message += html;
+          
         });
         $("#list-messages").html(message);
         scrollauto();

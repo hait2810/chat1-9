@@ -83,3 +83,7 @@ body::-webkit-scrollbar-thumb {
   transition: all 0.3 ease;
   /* border: 1px solid rgb(142, 147, 189); */
 }
+
+.addcolor {
+  color: rgb(243, 81, 81) !important;
+}

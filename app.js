@@ -3,6 +3,7 @@ var routerUser = require('./routes/user')
 const mongoose = require('mongoose')
 var app = express();
 var path = require("path");
+var moment = require("moment")
 const routerChat = require("./routes/chat");
 var http = require("http").Server(app);
 var io = require("socket.io")(http);
@@ -50,18 +51,36 @@ app.get((req, res, next) => {
 var users = [];
 var message = [];
 _io.on("connection", (socket) => {
+  const time = moment().format("HH:mm L");  
       socket.on('useronline', (data) => {
         const userExist = users.find((item) => item._id == data._id)
         if(!userExist) {
           users.push(data)
+          
+                const raw = {
+                    id: "63bf8e705f4e6b61f38ddfbf",
+                    time,
+                    fullname: "Bot",
+                    message: "Chào mừng "+data.fullname + " đã tham gia",
+                    avatar: "https://cdn-icons-png.flaticon.com/512/4712/4712074.png"
+                }
+                message.push(raw)
           socket._iduser = data._id
           _io.sockets.emit('senduseronline', users)
         }
       })
       _io.sockets.emit('senduseronline', users)
       socket.on('sendmessage', (data) => {
-           if(data.message == '/cls') {
+           if(data.message == '/cls' && data._id == "63bcd25fc9447326c0c72778") {
                 message = []
+                const raw = {
+                    id: "63bf8e705f4e6b61f38ddfbf",
+                    time,
+                    fullname: "Bot",
+                    message: "Hệ thống vừa xoá toàn bộ tin nhắn !!!",
+                    avatar: "https://cdn-icons-png.flaticon.com/512/4712/4712074.png"
+                }
+                message.push(raw)
                 _io.sockets.emit("sendmessserver", message);
            }
            else {

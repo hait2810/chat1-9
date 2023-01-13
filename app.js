@@ -57,17 +57,20 @@ _io.on("connection", (socket) => {
         if(!userExist) {
           users.push(data)
           
-                const raw = {
-                    id: "63bf8e705f4e6b61f38ddfbf",
-                    time,
-                    fullname: "Bot",
-                    message: "Chào mừng "+data.fullname + " đã tham gia",
-                    avatar: "https://cdn-icons-png.flaticon.com/512/4712/4712074.png"
-                }
-                message.push(raw)
+                
           socket._iduser = data._id
           _io.sockets.emit('senduseronline', users)
         }
+      })
+      socket.on("loginsucess", (data) => {
+        const raw = {
+          id: "63bf8e705f4e6b61f38ddfbf",
+          time,
+          fullname: "Bot",
+          message: "Chào mừng "+data.fullname + " đã tham gia",
+          avatar: "https://cdn-icons-png.flaticon.com/512/4712/4712074.png"
+      }
+      message.push(raw)
       })
       _io.sockets.emit('senduseronline', users)
       socket.on('sendmessage', (data) => {

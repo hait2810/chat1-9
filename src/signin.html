@@ -33,7 +33,9 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.2/axios.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script>
+      const socket = io()
         function showNoti(status, message, title) {
         Command: toastr[status](message, title);
         toastr.options = {
@@ -82,7 +84,9 @@
                     return showNoti("error", res.data.message, "Faild!");
                 }else {
                     showNoti("success", "Login success", "Success!");
+                    socket.emit("loginsucess", res.data.user)
                     localStorage.setItem('user', JSON.stringify(res.data.user))
+
                     setTimeout(() => {
                         window.location='/' 
                     }, 1500);

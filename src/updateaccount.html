@@ -146,7 +146,7 @@
           fullname: fullname.val(),
           sdt: sdt.val(),
           avatar: linkavatar,
-          facebook: password.val()
+          password: password.val()
         };
         }
         const res = await axios.put("/user/" + id[4], raw);
